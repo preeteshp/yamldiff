@@ -18,8 +18,18 @@ class YamldiffKeyError < YamldiffError
 end
 
 class YamldiffKeyValueTypeError < YamldiffError
+  attr_reader :diff
+  def initialize(key, context, diff = nil)
+    super key, context
+    @diff = diff  
+  end
+
   def to_s
-    "Key value type mismatch: #{path}"
+    output = ["Key value type mismatch: #{path}", "key content differs"]
+    if @diff
+      output << "Diff:" << @diff
+    end
+    output.join("\n")
   end
 end
 
